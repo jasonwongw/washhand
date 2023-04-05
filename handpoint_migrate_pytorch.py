@@ -145,15 +145,17 @@ class structure:
             if min_val_loss > val_loss:
                 min_val_loss = val_loss
                 best_model = copy.deepcopy(self.model)
+            if epoch%20==0: #20轮保存一次
+                torch.save(best_model, 'handbox{}.pth'.format(epoch))
         torch.save(best_model, 'my_model_pytorch.pth')
         print('训练完成')
 
     def predict(self,input, model, device):
-      model.to(device)
-      with torch.no_grad():
-        input=input.to(device)
-        out = model(input)
-        #_, pre = torch.max(out.data, 1) #分类任务，输出最大值
+        model.to(device)
+        with torch.no_grad():
+            input=input.to(device)
+            out = model(input)
+            #_, pre = torch.max(out.data, 1) #分类任务，输出最大值
         return out#pre.item()
 
     def predict_show(self,mod,inp):
